@@ -9,7 +9,7 @@ class TableRepository {
 
     static getBasicSchema = async ({keyspace, table}: { keyspace: string, table: string }) => {
         return (await client
-                .execute(`SELECT type FROM system_schema.columns WHERE keyspace_name = '${keyspace}' AND table_name = '${table}'`)
+                .execute(`SELECT type,column_name FROM system_schema.columns WHERE keyspace_name = '${keyspace}' AND table_name = '${table}'`)
         ).rows
     }
 }

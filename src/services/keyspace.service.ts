@@ -1,7 +1,7 @@
 import KeyspaceRepository from "../repositories/keyspace.repository";
 
 class KeyspaceService{
-    static getAll=async ()=>{
+    static getAll=async ():Promise<string[]>=>{
         const keyspace=await KeyspaceRepository.getAll();
 
         return keyspace
