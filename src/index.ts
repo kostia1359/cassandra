@@ -1,9 +1,10 @@
-import client from "./config";
+import KeyspaceService from "./services/keyspace.service";
+import TableService from "./services/table.service";
 
 (async ()=>{
-    const keySpaces=(await client.execute('SELECT keyspace_name FROM system_schema.keyspaces')).rows
-        .filter(row=>typeof row.keyspace_name==='string' && !row.keyspace_name.startsWith('system'))
-        .map(row=>row.keyspace_name);
-
-    console.log(keySpaces)
+    const keyspace=await KeyspaceService.getAll();
+    console.log(keyspace);
+    const tables=await TableService.getAll(keyspace[0]);
+    console.log(tables);
+    console.log(await TableService.getBasicSchema({keyspace:keyspace[0], table:tables[0]}));
 })()
