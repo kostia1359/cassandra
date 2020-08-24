@@ -18,24 +18,39 @@ const regExps={
 }
 
 export const mapper={
-    ascii:`{"type":"string","pattern":"^${regExps["ascii"]}$"}`,
-    bigint:`{"type":"integer","minimum":-${numbers["bigIntMax"]},"maximum":${numbers["bigIntMax"]-1}}`,
-    blob:`{"type":"string","pattern":"^${regExps["blob"]}$"}`,
-    boolean:'{"type":"boolean"}',
-    counter:`{"type":"integer","minimum":-${numbers["bigIntMax"]},"maximum":${numbers["bigIntMax"]-1}}`,
-    date: `{"oneOf":[{"type":"string","pattern":"^${regExps["date"]}$"},{"type":"integer","minimum":0,"maximum":${numbers["intMax"] * 2 - 1}}]}`,
-    decimal:'{"type":"number"}',
-    double:`{"type":"number","minimum":-${numbers["doubleMax"]},"maximum":${numbers["doubleMax"]-1}}`,
-    float:`{"type":"number","minimum":-${numbers["floatMax"]},"maximum":${numbers["floatMax"]-1}}`,
-    inet:`{"oneOf":[{"type":"string","format":"ipv4"},{"type":"string","format":"ipv6"}]}`,
-    int:`{"type":"integer","minimum":-${numbers["intMax"]},"maximum":${numbers["intMax"]-1}}`,
-    smallint:`{"type":"integer","minimum":-${numbers["smallIntMax"]},"maximum":${numbers["smallIntMax"]-1}}`,
-    text:'{"type":"string"}',
-    time: `{"oneOf":[{"type":"string","pattern":"^${regExps["time"]}$"},{"type":"integer","minimum":0,"maximum":${numbers["bigIntMax"] * 2 - 1}}]}`,
-    timestamp:`{"type":"string","pattern":"^${regExps["date"]} ${regExps["time"]}$"}`,
-    timeuuid:`{"type":"string","pattern":"^${regExps["uuid"]}$"}`,
-    tinyint:`{"type":"integer","minimum":-${numbers["tinyIntMax"]},"maximum":${numbers["tinyIntMax"]-1}}`,
-    uuid:`{"type":"string","pattern":"^${regExps["uuid"]}$"}`,
-    varchar:'{"type":"string"}',
-    varint:'{"type":"integer"}'
+    ascii:{"type":"string","pattern":`^${regExps["ascii"]}$`},
+    bigint:{"type":"integer","minimum":-numbers["bigIntMax"],"maximum":numbers["bigIntMax"]-1},
+    blob:{"type":"string","pattern":`^${regExps["blob"]}$`},
+    boolean:{"type":"boolean"},
+    counter:{"type":"integer","minimum":-numbers["bigIntMax"],"maximum":numbers["bigIntMax"]-1},
+    date: {
+        "oneOf":[
+            {"type":"string","pattern":`^${regExps["date"]}$`},
+            {"type":"integer","minimum":0,"maximum":numbers["intMax"] * 2 - 1}
+            ]
+    },
+    decimal:{"type":"number"},
+    double:{"type":"number","minimum":-numbers["doubleMax"],"maximum":numbers["doubleMax"]-1},
+    float:{"type":"number","minimum":-numbers["floatMax"],"maximum":numbers["floatMax"]-1},
+    inet:{
+        oneOf:[
+            {"type":"string","format":"ipv4"},
+            {"type":"string","format":"ipv6"}
+            ]
+    },
+    int:{"type":"integer","minimum":-numbers["intMax"],"maximum":numbers["intMax"]-1},
+    smallint:{"type":"integer","minimum":-numbers["smallIntMax"],"maximum":numbers["smallIntMax"]-1},
+    text:{"type":"string"},
+    time: {
+        "oneOf":[
+            {"type":"string","pattern":`^${regExps["time"]}$`},
+            {"type":"integer","minimum":0,"maximum":numbers["bigIntMax"] * 2 - 1}
+            ]
+    },
+    timestamp:{"type":"string","pattern":`^${regExps["date"]} ${regExps["time"]}$`},
+    timeuuid:{"type":"string","pattern":`^${regExps["uuid"]}$`},
+    tinyint:{"type":"integer","minimum":-numbers["tinyIntMax"],"maximum":numbers["tinyIntMax"]-1},
+    uuid:{"type":"string","pattern":`^${regExps["uuid"]}$`},
+    varchar:{"type":"string"},
+    varint:{"type":"integer"}
 }
