@@ -2,7 +2,7 @@ import {mapper} from "./mappers/advancedTypes.mapper";
 import {mapper as basicMapper} from './mappers/basicTypes.mapper'
 import {IColumnType} from "../types/tableName";
 
-const getClosingTagIndex = (str: string, startIndex: number) => {
+export const getClosingTagIndex = (str: string, startIndex: number) => {
     let unclosedTags = 1;
     let index = startIndex;
 
@@ -36,7 +36,7 @@ export const removeFrozen = (str: string): string => {
     );
 }
 
-const getType = (str: string) => {
+export const getType = (str: string) => {
     const openTagIndex = str.indexOf('<') + 1;
 
     if (openTagIndex === 0) {
@@ -49,7 +49,7 @@ const getType = (str: string) => {
     };
 }
 
-const getComplexSchema = (str: string): object => {
+export const getComplexSchema = (str: string): object => {
     const complexType = getType(str);
 
     if (complexType.string === '') {
