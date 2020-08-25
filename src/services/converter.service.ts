@@ -56,16 +56,7 @@ class ConverterService {
                 console.error('Property can not be repetitive ')
                 return accum;
             }
-
-            if (schema.selectedString && schema.type === 'text') {
-                try {
-                    const object = JSON.parse(schema.selectedString[schema.column]);
-
-                    return {...accum, [schema.column]: typesHelper.createObjectType(object)};
-                } catch (e) {
-                }
-            }
-            const type = typesHelper.getSchema(typesHelper.removeFrozen(schema.type))
+            const type = typesHelper.getSchema(schema)
 
             return {...accum, [schema.column]: type};
         }, {})

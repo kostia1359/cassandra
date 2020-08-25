@@ -1,7 +1,8 @@
 import {mapper} from "./mappers/advancedTypes.mapper";
 import {mapper as basicMapper} from './mappers/basicTypes.mapper'
+import {IColumnType} from "../types/tableName";
 
-const getClosingTagIndex=(str:string, startIndex:number)=>{
+const getClosingTagIndex = (str: string, startIndex: number) => {
     let unclosedTags = 1;
     let index = startIndex;
 
@@ -16,7 +17,7 @@ const getClosingTagIndex=(str:string, startIndex:number)=>{
         index++;
     }
 
-    return index-1;
+    return index - 1;
 }
 
 export const removeFrozen = (str: string): string => {
@@ -26,16 +27,16 @@ export const removeFrozen = (str: string): string => {
         return str;
     }
 
-    const index=getClosingTagIndex(str,frozenIndex)
+    const index = getClosingTagIndex(str, frozenIndex)
 
     return removeFrozen(
         str.slice(0, frozenIndex - 7)
             .concat(str.slice(frozenIndex, index))
-            .concat(str.slice(index+1, str.length))
+            .concat(str.slice(index + 1, str.length))
     );
 }
 
-const getType = (str:string) => {
+const getType = (str: string) => {
     const openTagIndex = str.indexOf('<') + 1;
 
     if (openTagIndex === 0) {
@@ -48,17 +49,17 @@ const getType = (str:string) => {
     };
 }
 
-export const getSchema = (str:string):object => {
+const getComplexSchema = (str: string): object => {
     const complexType = getType(str);
 
     if (complexType.string === '') {
-        return {type:'text',...basicMapper[complexType.type]}
+        return {type: 'text', ...basicMapper[complexType.type]}
     }
 
     if (complexType.type === 'tuple') {
         return {
             ...mapper[complexType.type],
-            items: complexType.string.split(', ').map(getSchema)
+            items: complexType.string.split(', ').map(getComplexSchema)
         }
     }
 
@@ -66,25 +67,42 @@ export const getSchema = (str:string):object => {
         return {
             ...mapper[complexType.type],
             items: {
-                type:'array',
-                items:complexType.string.split(', ').map(getSchema)
+                type: 'array',
+                items: complexType.string.split(', ').map(getComplexSchema)
             }
         }
     }
 
     return {
         ...mapper[complexType.type],
-        items: getSchema(complexType.string)
+        items: getComplexSchema(complexType.string)
     }
 }
 
-export const  createObjectType = (obj:{[index: string]:any}):object => {
+export const createObjectType = (obj: { [index: string]: any }): object => {
     return {
         type: "object",
         properties: Object.keys(obj).reduce((accum, key) => {
+            if (obj[key] === null) {
+                return {
+                    ...accum, [key]: {
+                        type: "null"
+                    }
+                }
+            }
+
+            if (typeof obj[key] === "object" && !Object.keys(obj[key]).length) {
+                return {
+                    ...accum, [key]: {
+                        type: "string"
+                    }
+                }
+            }
+
             if (typeof obj[key] === "object") {
                 return {...accum, [key]: createObjectType(obj[key])}
             }
+
             return {
                 ...accum, [key]: {
                     type: typeof obj[key]
@@ -92,4 +110,27 @@ export const  createObjectType = (obj:{[index: string]:any}):object => {
             }
         }, {})
     }
+}
+
+export const getSchema = (schema: IColumnType) => {
+    if (schema.selectedString && schema.type === 'text') {
+        try {
+            const object = JSON.parse(schema.selectedString[schema.column]);
+
+            return createObjectType(object);
+        } catch (e) {
+        }
+    }
+
+    const shortenedType = removeFrozen(schema.type);
+
+    if (
+        !mapper.hasOwnProperty(shortenedType) && !basicMapper.hasOwnProperty(shortenedType) && schema.selectedString
+        && shortenedType.indexOf('<') === -1 && typeof schema.selectedString[schema.column] === 'object'
+    ) {
+        console.log(schema.selectedString[schema.column]);
+        return createObjectType(schema.selectedString[schema.column]);
+    }
+
+    return getComplexSchema(shortenedType);
 }
