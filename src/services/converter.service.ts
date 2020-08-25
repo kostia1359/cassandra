@@ -58,11 +58,12 @@ class ConverterService {
             }
 
             if (schema.selectedString && schema.type === 'text') {
-                try{
-                    const object=JSON.parse(schema.selectedString[schema.column]);
+                try {
+                    const object = JSON.parse(schema.selectedString[schema.column]);
 
                     return {...accum, [schema.column]: typesHelper.createObjectType(object)};
-                }catch (e){}
+                } catch (e) {
+                }
             }
             const type = typesHelper.getSchema(typesHelper.removeFrozen(schema.type))
 

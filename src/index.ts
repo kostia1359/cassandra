@@ -1,5 +1,5 @@
 import converterService from "./services/converter.service"
 
-(async ()=>{
+(async () => {
     await converterService.createJSON();
 })()

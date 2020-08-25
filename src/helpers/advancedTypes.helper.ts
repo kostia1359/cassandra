@@ -1,5 +1,5 @@
-import {mapper} from "./advancedTypesMapper.helper";
-import {mapper as basicMapper} from './basicTypesMapper.helper'
+import {mapper} from "./mappers/advancedTypes.mapper";
+import {mapper as basicMapper} from './mappers/basicTypes.mapper'
 
 const getClosingTagIndex=(str:string, startIndex:number)=>{
     let unclosedTags = 1;

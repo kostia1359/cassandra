@@ -1,12 +1,12 @@
 import KeyspaceRepository from "../repositories/keyspace.repository";
 
-class KeyspaceService{
-    static getAll=async ():Promise<string[]>=>{
-        const keyspace=await KeyspaceRepository.getAll();
+class KeyspaceService {
+    static getAll = async (): Promise<string[]> => {
+        const keyspace = await KeyspaceRepository.getAll();
 
         return keyspace
-            .filter(row=>typeof row.keyspace_name==='string' && !row.keyspace_name.startsWith('system'))
-            .map(row=>row.keyspace_name);
+            .filter(row => typeof row.keyspace_name === 'string' && !row.keyspace_name.startsWith('system'))
+            .map(row => row.keyspace_name);
     }
 }
 
