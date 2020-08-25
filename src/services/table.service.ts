@@ -12,12 +12,14 @@ class TableService {
 
     static getBasicSchema = async ({keyspace, table}: { keyspace: string, table: string }):Promise<IColumnType[]> => {
         const schema =await TableRepository.getBasicSchema({keyspace, table});
+        const selectedString=(await TableRepository.getRow({keyspace,table}))[0]
 
         return schema
             .filter(row=>typeof row.type==='string'&&typeof row.column_name==='string')
             .map(row=>({
                 type:row.type,
-                column:row.column_name
+                column:row.column_name,
+                selectedString
             }));
     }
 }

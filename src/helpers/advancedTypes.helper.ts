@@ -77,3 +77,19 @@ export const getSchema = (str:string):object => {
         items: getSchema(complexType.string)
     }
 }
+
+export const  createObjectType = (obj:{[index: string]:any}):object => {
+    return {
+        type: "object",
+        properties: Object.keys(obj).reduce((accum, key) => {
+            if (typeof obj[key] === "object") {
+                return {...accum, [key]: createObjectType(obj[key])}
+            }
+            return {
+                ...accum, [key]: {
+                    type: typeof obj[key]
+                }
+            }
+        }, {})
+    }
+}

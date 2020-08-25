@@ -32,7 +32,7 @@ class ConverterService {
         const schemas = await Promise.all(tables.map(async (table) => {
             const schema = await TableService.getBasicSchema({keyspace, table});
             return {
-                schema:this.convertSchema(schema),
+                schema: this.convertSchema(schema),
                 table: `${keyspace}.${table}`
             }
         }));
@@ -50,15 +50,24 @@ class ConverterService {
         return {...header, properties: schema}
     }
 
-    convertSchema=(schema: IColumnType[])=>{
-        return schema.reduce((accum,schema)=>{
-            if(accum.hasOwnProperty(schema.column)){
+    convertSchema = (schema: IColumnType[]) => {
+        return schema.reduce((accum, schema) => {
+            if (accum.hasOwnProperty(schema.column)) {
                 console.error('Property can not be repetitive ')
                 return accum;
             }
-            const type=typesHelper.getSchema(typesHelper.removeFrozen(schema.type))
-            return {...accum,[schema.column]:type};
-        },{})
+
+            if (schema.selectedString && schema.type === 'text') {
+                try{
+                    const object=JSON.parse(schema.selectedString[schema.column]);
+
+                    return {...accum, [schema.column]: typesHelper.createObjectType(object)};
+                }catch (e){}
+            }
+            const type = typesHelper.getSchema(typesHelper.removeFrozen(schema.type))
+
+            return {...accum, [schema.column]: type};
+        }, {})
     }
 }
 

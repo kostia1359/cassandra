@@ -1,4 +1,5 @@
 export interface IColumnType{
     type:string,
-    column:string
+    column:string,
+    selectedString:{ [index: string]: string }|undefined
 }

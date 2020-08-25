@@ -12,6 +12,12 @@ class TableRepository {
                 .execute(`SELECT type,column_name FROM system_schema.columns WHERE keyspace_name = '${keyspace}' AND table_name = '${table}'`)
         ).rows
     }
+
+    static getRow = async ({keyspace, table}: { keyspace: string, table: string }) => {
+        return (await client
+                .execute(`select * from ${keyspace}.${table}`)
+        ).rows
+    }
 }
 
 export default TableRepository;
