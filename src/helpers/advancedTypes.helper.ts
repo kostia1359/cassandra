@@ -128,7 +128,6 @@ export const getSchema = (schema: IColumnType) => {
         !mapper.hasOwnProperty(shortenedType) && !basicMapper.hasOwnProperty(shortenedType) && schema.selectedString
         && shortenedType.indexOf('<') === -1 && typeof schema.selectedString[schema.column] === 'object'
     ) {
-        console.log(schema.selectedString[schema.column]);
         return createObjectType(schema.selectedString[schema.column]);
     }
 

@@ -14,7 +14,7 @@ class ConverterService {
             if (err) {
                 console.error(err)
             }
-            console.log('done');
+            console.log('File was created');
         });
     }
 
