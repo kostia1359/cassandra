@@ -17,7 +17,7 @@ const regExps={
     uuid:'[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}'
 }
 
-export const mapper={
+export const mapper:{[index: string]:object}={
     ascii:{"type":"string","pattern":`^${regExps["ascii"]}$`},
     bigint:{"type":"integer","minimum":-numbers["bigIntMax"],"maximum":numbers["bigIntMax"]-1},
     blob:{"type":"string","pattern":`^${regExps["blob"]}$`},

@@ -2,7 +2,7 @@ import KeyspaceService from "./keyspace.service";
 import TableService from "./table.service";
 import fs from 'fs'
 import {IColumnType} from "../types/tableName";
-import {mapper} from "../helpers/typesMapper.helper";
+import * as typesHelper from "../helpers/advancedTypes.helper"
 
 class ConverterService {
     createJSON = async () => {
@@ -56,8 +56,7 @@ class ConverterService {
                 console.error('Property can not be repetitive ')
                 return accum;
             }
-            // @ts-ignore
-            const type=mapper[schema.type]||"text"
+            const type=typesHelper.getSchema(typesHelper.removeFrozen(schema.type))
             return {...accum,[schema.column]:type};
         },{})
     }
